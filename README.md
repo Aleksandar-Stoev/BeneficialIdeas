@@ -4,10 +4,6 @@ A web application developed as a course project for the **Django Advanced** cour
 
 ## Getting Started (Local Development)
 
-### Prerequisites
-* Python 3.10+
-* pip
-
 ### Installation
 1. Clone the repository:
    ```bash
