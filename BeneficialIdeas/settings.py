@@ -27,6 +27,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+PROJECT_APPS = [
+    'accounts',
+    'categories',
+    'common',
+    'ideas',
+    'resources',
+]
 
 # Application definition
 
@@ -76,8 +83,12 @@ WSGI_APPLICATION = 'BeneficialIdeas.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'beneficialideas_db',
+        'USER': 'postgres',
+        'PASSWORD': 'admin',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
