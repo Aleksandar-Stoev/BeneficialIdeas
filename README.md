@@ -2,15 +2,6 @@
 
 A web application developed as a course project for the **Django Advanced** course at **SoftUni**.
 
-## Project Roadmap
-
-- [x] Initialize Django project
-- [x] Configure Git and GitHub repository
-- [ ] Implement Custom User Model (`accounts` app)
-- [ ] Define core database models (`ideas`, `categories`, `resources`, `common`)
-- [ ] Set up Authentication & Authorization
-- [ ] Choose deployment/runtime architecture (Local execution vs. Docker setup)
-
 ## Getting Started (Local Development)
 
 ### Prerequisites
