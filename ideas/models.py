@@ -32,7 +32,7 @@ class Idea(models.Model):
     )
 
     category = models.ManyToManyField(
-        'Category',
+        'categories.Category',
         related_name='ideas',
         verbose_name='Category',
     )
