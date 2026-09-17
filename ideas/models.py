@@ -31,9 +31,8 @@ class Idea(models.Model):
         verbose_name='Author',
     )
 
-    category = models.ForeignKey(
+    category = models.ManyToManyField(
         'Category',
-        on_delete=models.CASCADE,
         related_name='ideas',
         verbose_name='Category',
     )
@@ -61,6 +60,6 @@ class Idea(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = 'Идея'
-        verbose_name_plural = 'Идеи'
+        verbose_name = 'Idea'
+        verbose_name_plural = 'Ideas'
         ordering = ['-created_at']

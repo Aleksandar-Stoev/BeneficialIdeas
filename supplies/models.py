@@ -2,14 +2,14 @@ from django.db import models
 from ideas.models import Idea
 
 
-class Resource(models.Model):
+class Supplies(models.Model):
     idea = models.ForeignKey(
         Idea,
         on_delete=models.CASCADE,
-        related_name='resources',
+        related_name='supplies',
     )
     name = models.CharField(
-        max_length=100, verbose_name='Required resource'
+        max_length=100, verbose_name='Required supplies'
     )
     quantity = models.PositiveIntegerField(
         default=1, verbose_name='Required quantity'
