@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>All Ideas</h1>
+    <a href="{% url 'idea-create' %}" class="btn btn-primary mb-3">Create New Idea</a>
+
+    <div class="row">
+        {% for idea in ideas %}
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ idea.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Author: {{ idea.author.username }}</h6>
+                        <p class="card-text">{{ idea.description|truncatewords:20 }}</p>
+                        <p><strong>Coins:</strong> 🪙 {{ idea.inspiration_coins }}</p>
+                        <a href="{% url 'idea-detail' idea.pk %}" class="btn btn-secondary btn-sm">View Details</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>No ideas have been posted yet. Be the first!</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
