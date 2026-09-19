@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.db import models
+from django.db import models, transaction
 
 User = get_user_model()
 
@@ -55,6 +55,19 @@ class Idea(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True, verbose_name='Last edit'
     )
+
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+
+        if is_new:
+            with transaction.atomic():
+                super().save(*args, **kwargs)
+                if self.author and hasattr(self.author, 'profile'):
+                    profile = self.author.profile
+                    profile.inspiration_coins += 100
+                    profile.save()
+        else:
+            super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
