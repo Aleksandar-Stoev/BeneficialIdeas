@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from django.views.generic import ListView
+from ideas.models import Idea
 
-# Create your views here.
+
+class HomeView(ListView):
+    model = Idea
+    template_name = 'common/index.html'
+    context_object_name = 'ideas'
