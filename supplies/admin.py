@@ -1,3 +1,7 @@
 from django.contrib import admin
+from supplies.models import Supplies
 
-# Register your models here.
+
+@admin.register(Supplies)
+class SuppliesAdmin(admin.ModelAdmin):
+    pass
