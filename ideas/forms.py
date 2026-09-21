@@ -10,10 +10,10 @@ class IdeaForm(forms.ModelForm):
         fields = ['title', 'description', 'category', ]
 
 
-SuppliesFormSet = inlineformset_factory(
+SuppliesFormSet = inlineformset_factory(  # TODO: make it optional
     Idea,
     Supplies,
-    fields=['name', 'quantity', 'is_secured'],
+    fields=['name', 'quantity', 'is_secured'],  # TODO: remove 'is_secured'
     extra=3,
     can_delete=True
 )

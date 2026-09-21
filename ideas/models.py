@@ -37,7 +37,7 @@ class Idea(models.Model):
         verbose_name='Category',
     )
 
-    inspiration_coins = models.PositiveIntegerField(
+    inspiration_coins = models.PositiveIntegerField(  # TODO: signals for received inspiration_coins
         default=0,
         verbose_name='Collected inspiration_coins',
     )
