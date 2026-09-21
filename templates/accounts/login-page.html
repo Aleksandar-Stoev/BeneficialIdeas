@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Entry | Beneficial Ideas{% endblock %}
+
+{% block content %}
+  <h2>Login to BeneficialIdeas</h2>
+
+  <form method="post">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <div style="color: red;">
+        {% for error in form.non_field_errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div>
+      <label for="id_username">Email address:</label><br>
+      <input type="email" name="username" id="id_username" required autocomplete="email">
+    </div>
+
+    <br>
+
+    <div>
+      <label for="id_password">Password:</label><br>
+      <input type="password" name="password" id="id_password" required autocomplete="current-password">
+    </div>
+
+    <br>
+
+    <button type="submit">Log in</button>
+  </form>
+{% endblock %}
