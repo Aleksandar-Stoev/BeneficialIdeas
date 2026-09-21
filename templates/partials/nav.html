@@ -1,0 +1,17 @@
+<nav>
+    <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'idea-list' %}">All Ideas</a></li>
+
+        {% if request.user.is_authenticated %}
+            <li><a href="{% url 'idea-create' %}">Create Idea</a></li>
+            <!-- link to profile -->
+            <form action="{% url 'logout' %}" style="display: inline;" method="post">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>            {% else %}
+                            <li><a href="{% url 'login' %}">Login</a></li>
+                            <li><a href="{% url 'register' %}">Register</a></li>
+        {% endif %}
+    </ul>
+</nav>

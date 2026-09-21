@@ -8,32 +8,20 @@
 </head>
 <body>
 
-    <nav>
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'idea-list' %}">All Ideas</a></li>
+<header>
+    {% include 'partials/nav.html' %}
+</header>
 
-            {% if request.user.is_authenticated %}
-                <li><a href="{% url 'idea-create' %}">Create Idea</a></li>
-                <!-- link to profile -->
-{#                <li><a href="{% url 'logout' %}">Logout</a></li>#}
-            {% else %}
-{#                <li><a href="{% url 'login' %}">Login</a></li>#}
-{#                <li><a href="{% url 'register' %}">Register</a></li>#}
-            {% endif %}
-        </ul>
-    </nav>
+<hr>
 
-    <hr>
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
 
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
+<hr>
 
-    <hr>
-
-    {% include 'partials/footer.html' %}
+{% include 'partials/footer.html' %}
 
 </body>
 </html>
