@@ -5,7 +5,7 @@
 
         {% if request.user.is_authenticated %}
             <li><a href="{% url 'idea-create' %}">Create Idea</a></li>
-            <!-- link to profile -->
+            <li><a href="{% url 'profile-detail' pk=request.user.pk %}">My Profile</a></li>
             <form action="{% url 'logout' %}" style="display: inline;" method="post">
                 {% csrf_token %}
                 <button type="submit">Logout</button>

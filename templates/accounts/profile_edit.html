@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit profile{% endblock %}
+
+{% block content %}
+<section class="form-container">
+    <h1>Edit your details</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">Save changes</button>
+            <a href="{% url 'profile-detail' pk=request.user.pk %}">Refusal</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

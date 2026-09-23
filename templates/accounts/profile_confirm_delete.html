@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete account{% endblock %}
+
+{% block content %}
+<section class="delete-container">
+    <h1>Attention! Deleting an account</h1>
+    <p>Are you sure you want to delete your profile? This action is irreversible!</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn-danger">Yes, I confirm the deletion.</button>
+        <a href="{% url 'profile-detail' pk=object.pk %}" class="btn-cancel">Refusal</a>
+    </form>
+</section>
+{% endblock %}

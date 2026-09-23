@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile of {{ profile_user.email }}{% endblock %}
+
+{% block content %}
+    <section class="profile-container">
+        <h1>{{ profile_user.email }}</h1>
+
+        <div class="profile-info">
+            {% if profile_user.profile_image %}
+                <p><img src="{{ profile_user.profile_image.url }}" alt="Profile Image" width="150"></p>
+            {% endif %}
+            <p><strong>Name:</strong> {{ profile_user.profile.first_name }} {{ profile_user.profile.last_name }}</p>
+            <p><strong>Your Ideas:</strong> {{ profile_user.ideas.all }} </p>
+            <p><strong>Inspiration Coins:</strong> {{ profile_user.profile.inspiration_coins }}</p>
+            <p><strong>Supported ideas:</strong></p>
+            <ul>
+                {% for idea in profile_user.profile.supported_ideas.all %}
+                    <li><a href="{% url 'idea-detail' idea.pk %}">{{ idea.title }}</a></li>
+                {% empty %}
+                    <li>No supported ideas yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <hr>
+
+        {% if request.user == profile_user %}
+            <div class="profile-actions">
+                <a href="{% url 'profile-edit' pk=profile_user.pk %}" class="btn">Edit profile</a>
+                <a href="{% url 'profile-delete' pk=profile_user.pk %}" class="btn btn-danger">Delete the account</a>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}
