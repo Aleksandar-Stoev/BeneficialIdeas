@@ -1,6 +1,8 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+
+from BeneficialIdeas import settings
 from accounts.managers import BenevolentUserManager
 
 
@@ -21,7 +23,7 @@ class BenevolentUser(AbstractBaseUser, PermissionsMixin):
 class Profile(models.Model):
 
     user = models.OneToOneField(
-        BenevolentUser,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         primary_key=True,
         related_name="profile",
