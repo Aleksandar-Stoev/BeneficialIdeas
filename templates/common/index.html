@@ -3,7 +3,39 @@
 {% block title %}Home - Beneficial Ideas{% endblock %}
 
 {% block content %}
-    <h1>Welcome to Beneficial Ideas!</h1>
-    <p>Explore ideas or share your own to make our world a better place.</p>
-    {{ ideas }}
+    <section class="welcome-section">
+        <h1>Welcome to Beneficial Ideas!</h1>
+        <p>Explore ideas or share your own to make our world a better place.</p>
+    </section>
+
+    <hr>
+
+    <section class="latest-ideas-section">
+        <h2>Latest Ideas</h2>
+
+        {% if ideas %}
+            <div class="ideas-grid">
+                {% for idea in ideas %}
+                    <article class="idea-card">
+                        <h3>
+                            <a href="{% url 'idea-detail' idea.pk %}">{{ idea.title }}</a>
+                        </h3>
+                        <p>{{ idea.description|truncatechars:100 }}</p>
+                        <p><strong>Author:</strong>
+                            {% if idea.author.profile %}
+                                {{ idea.author.profile.first_name }} {{ idea.author.profile.last_name }}
+                            {% else %}
+                                {{ idea.author.email }}
+                            {% endif %}
+                        </p>
+                        <p><strong>Inspiration Coins:</strong> {{ idea.inspiration_coins }}</p>
+                        <p><strong>Status:</strong> {{ idea.get_status_display }}</p>
+                    </article>
+                    <hr>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No ideas shared yet. Be the first one to <a href="{% url 'idea-create' %}">create an idea</a>!</p>
+        {% endif %}
+    </section>
 {% endblock %}

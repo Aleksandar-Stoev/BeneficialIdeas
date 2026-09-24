@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html lang="bg">
-<head>
-    <meta charset="UTF-8">
-    <title>{% if object %}Refining{% else %}Create{% endif %}</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
+{% block title %}
+    {% if object %}Refining{% else %}Create{% endif %}
+{% endblock %}
+
+{% block content %}
 <h1>{% if object %}Refining the idea{% else %}New idea{% endif %}</h1>
 
 <form method="post">
@@ -32,8 +31,9 @@
                         {{ supplies_form.quantity }}
                         {{ supplies_form.quantity.errors }}
                     </td>
-                    <td>{{ supplies_form.is_secured }}
-                        {{ task_form.is_secured.errors }}
+                    <td>
+                        {{ supplies_form.is_secured }}
+                        {{ supplies_form.is_secured.errors }}
                     </td>
                     <td>
                         {% if formset.can_delete and supplies_form.instance.pk %}
@@ -47,6 +47,4 @@
 
     <button type="submit">Save</button>
 </form>
-
-</body>
-</html>
+{% endblock %}
