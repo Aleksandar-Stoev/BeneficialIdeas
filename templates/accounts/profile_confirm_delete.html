@@ -9,6 +9,7 @@
 
     <form method="POST">
         {% csrf_token %}
+        {{ form.as_p }}
         <button type="submit" class="btn-danger">Yes, I confirm the deletion.</button>
         <a href="{% url 'profile-detail' pk=object.pk %}" class="btn-cancel">Refusal</a>
     </form>

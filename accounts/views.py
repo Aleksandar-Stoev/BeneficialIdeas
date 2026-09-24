@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
-from accounts.forms import CustomUserCreationForm
+from accounts.forms import CustomUserCreationForm, ProfileEditForm, ProfileDeleteForm
 from accounts.models import Profile
 
 User = get_user_model()
@@ -24,8 +24,8 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = Profile
+    form_class = ProfileEditForm
     template_name = 'accounts/profile_edit.html'
-    fields = ['first_name', 'last_name', 'profile_image']
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get('pk')
@@ -37,6 +37,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
 class ProfileDeleteView(LoginRequiredMixin, DeleteView):
     model = Profile
+    form_class = ProfileDeleteForm
     template_name = 'accounts/profile_confirm_delete.html'
     success_url = reverse_lazy('home')
 
