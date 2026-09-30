@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load idea_tags %}
 
 {% block title %}Home - Beneficial Ideas{% endblock %}
 
@@ -12,6 +13,10 @@
 
     <section class="latest-ideas-section">
         <h2>Latest Ideas</h2>
+        <form method="get" action="">
+            {{ form.as_p }}
+            <button type="submit">Search</button>
+        </form>
 
         {% if ideas %}
             <div class="ideas-grid">
@@ -29,13 +34,17 @@
                             {% endif %}
                         </p>
                         <p><strong>Inspiration Coins:</strong> {{ idea.inspiration_coins }}</p>
-                        <p><strong>Status:</strong> {{ idea.get_status_display }}</p>
+                        <p><strong>Status:</strong> {{ idea.status|status_badge }}</p>
                     </article>
                     <hr>
                 {% endfor %}
             </div>
         {% else %}
-            <p>No ideas shared yet. Be the first one to <a href="{% url 'idea-create' %}">create an idea</a>!</p>
+            {% if form.query.value %}
+                <p>No ideas match your search criteria. Try a different keyword or <a href="{% url 'home' %}">clear the search</a>.</p>
+            {% else %}
+                <p>No ideas shared yet. Be the first one to <a href="{% url 'idea-create' %}">create an idea</a>!</p>
+            {% endif %}
         {% endif %}
     </section>
 {% endblock %}
