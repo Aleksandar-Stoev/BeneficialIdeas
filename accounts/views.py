@@ -13,7 +13,7 @@ User = get_user_model()
 class RegisterView(CreateView):
     template_name = 'accounts/register.html'
     form_class = CustomUserCreationForm
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('accounts:login')
 
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):
@@ -32,7 +32,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         return get_object_or_404(Profile, pk=pk)
 
     def get_success_url(self):
-        return reverse('profile-detail', kwargs={'pk': self.object.pk})
+        return reverse('accounts:details', kwargs={'pk': self.object.pk})
 
 
 class ProfileDeleteView(LoginRequiredMixin, DeleteView):

@@ -13,7 +13,7 @@
 
         <div class="form-actions">
             <button type="submit" class="btn-submit">Save changes</button>
-            <a href="{% url 'profile-detail' pk=request.user.pk %}">Refusal</a>
+            <a href="{% url 'accounts:details' pk=request.user.pk %}">Refusal</a>
         </div>
     </form>
 </section>

@@ -1,10 +1,14 @@
-from django.urls import path
+from django.urls import path, include
 from ideas import views
 
+app_name = 'ideas'
+
 urlpatterns = [
-    path('', views.IdeaListView.as_view(), name='idea-list'),
-    path('<int:pk>/', views.IdeaDetailView.as_view(), name='idea-detail'),
-    path('add/', views.IdeaCreateView.as_view(), name='idea-create'),
-    path('<int:pk>/edit/', views.IdeaUpdateView.as_view(), name='idea-edit'),
-    path('idea/<int:pk>/support/', views.support_idea_view, name='support-idea'),
+    path('', views.IdeaListView.as_view(), name='list'),
+    path('add/', views.IdeaCreateView.as_view(), name='create'),
+    path('<int:pk>/', include([
+        path('', views.IdeaDetailView.as_view(), name='detail'),
+        path('edit/', views.IdeaUpdateView.as_view(), name='edit'),
+        path('support/', views.support_idea_view, name='support'),
+    ]))
 ]

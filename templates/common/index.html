@@ -23,7 +23,7 @@
                 {% for idea in ideas %}
                     <article class="idea-card">
                         <h3>
-                            <a href="{% url 'idea-detail' idea.pk %}">{{ idea.title }}</a>
+                            <a href="{% url 'ideas:detail' idea.pk %}">{{ idea.title }}</a>
                         </h3>
                         <p>{{ idea.description|truncatechars:100 }}</p>
                         <p><strong>Author:</strong>
@@ -43,7 +43,7 @@
             {% if form.query.value %}
                 <p>No ideas match your search criteria. Try a different keyword or <a href="{% url 'home' %}">clear the search</a>.</p>
             {% else %}
-                <p>No ideas shared yet. Be the first one to <a href="{% url 'idea-create' %}">create an idea</a>!</p>
+                <p>No ideas shared yet. Be the first one to <a href="{% url 'ideas:create' %}">create an idea</a>!</p>
             {% endif %}
         {% endif %}
     </section>

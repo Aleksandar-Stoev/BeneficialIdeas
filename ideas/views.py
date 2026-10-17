@@ -37,7 +37,7 @@ class IdeaCreateView(LoginRequiredMixin, ProjectFormSetMixin, CreateView):
     model = Idea
     form_class = IdeaForm
     template_name = 'ideas/manage_idea.html'
-    success_url = reverse_lazy('idea-list')
+    success_url = reverse_lazy('ideas:list')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -48,7 +48,7 @@ class IdeaUpdateView(LoginRequiredMixin, ProjectFormSetMixin, UpdateView):
     model = Idea
     form_class = IdeaForm
     template_name = 'ideas/manage_idea.html'
-    success_url = reverse_lazy('idea-list')
+    success_url = reverse_lazy('ideas:list')
 
 
 class IdeaListView(ListView):
@@ -81,4 +81,4 @@ def support_idea_view(request, pk):
 
                 profile.supported_ideas.add(idea)
 
-    return redirect('idea-detail', pk=idea.pk)
+    return redirect('ideas:detail', pk=idea.pk)
