@@ -5,46 +5,48 @@
 {% endblock %}
 
 {% block content %}
-<h1>{% if object %}Refining the idea{% else %}New idea{% endif %}</h1>
+    <h1>{% if object %}Refining the idea{% else %}New idea{% endif %}</h1>
 
-<form method="post">
-    {% csrf_token %}
+    <form method="post">
+        {% csrf_token %}
 
-    <fieldset>
-        <legend>Information about the idea</legend>
-        {{ form.as_p }}
-    </fieldset>
+        {{ formset.non_form_errors }}
 
-    <fieldset>
-        <legend>Supplies for the idea</legend>
-        {{ formset.management_form }}
+        <fieldset>
+            <legend>Information about the idea</legend>
+            {{ form.as_p }}
+        </fieldset>
 
-        <table>
-            {% for supplies_form in formset %}
-                <tr>
-                    <td>
-                        {{ supplies_form.id }}
-                        {{ supplies_form.name }}
-                        {{ supplies_form.name.errors }}
-                    </td>
-                    <td>
-                        {{ supplies_form.quantity }}
-                        {{ supplies_form.quantity.errors }}
-                    </td>
-                    <td>
-                        {{ supplies_form.is_secured }}
-                        {{ supplies_form.is_secured.errors }}
-                    </td>
-                    <td>
-                        {% if formset.can_delete and supplies_form.instance.pk %}
-                            {{ supplies_form.DELETE }} DELETE
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-    </fieldset>
+        <fieldset>
+            <legend>Supplies for the idea</legend>
+            {{ formset.management_form }}
 
-    <button type="submit">Save</button>
-</form>
+            <table>
+                {% for supplies_form in formset %}
+                    <tr>
+                        <td>Supply
+                            {{ supplies_form.id }}
+                            {{ supplies_form.name }}
+                            {{ supplies_form.name.errors }}
+                        </td>
+                        <td>Quantity
+                            {{ supplies_form.quantity }}
+                            {{ supplies_form.quantity.errors }}
+                        </td>
+                        <td>Is it secured?
+                            {{ supplies_form.is_secured }}
+                            {{ supplies_form.is_secured.errors }}
+                        </td>
+                        <td>
+                            {% if formset.can_delete and supplies_form.instance.pk %}
+                                {{ supplies_form.DELETE }} DELETE
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </fieldset>
+
+        <button type="submit">Save</button>
+    </form>
 {% endblock %}

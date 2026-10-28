@@ -1,3 +1,4 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
@@ -77,8 +78,23 @@ def support_idea_view(request, pk):
                 profile.save()
 
                 idea.inspiration_coins += 10
+
+                if idea.inspiration_coins >= 100 and idea.status == Idea.StatusChoices.PENDING:
+                    idea.status = Idea.StatusChoices.APPROVED
+
                 idea.save()
 
                 profile.supported_ideas.add(idea)
+
+    return redirect('ideas:detail', pk=idea.pk)
+
+
+@staff_member_required
+def approve_idea_view(request, pk):
+    idea = get_object_or_404(Idea, pk=pk)
+
+    if idea.status == Idea.StatusChoices.PENDING:
+        idea.status = Idea.StatusChoices.APPROVED
+        idea.save()
 
     return redirect('ideas:detail', pk=idea.pk)

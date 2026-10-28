@@ -1,36 +1,43 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1>{{ idea.title }}</h1>
-    <p class="text-muted">Author: {{ idea.author.username }} | Created: {{ idea.created_at|date:"d M Y" }}</p>
-    
-    <hr>
-    
-    <h3>Description</h3>
-    <p>{{ idea.description }}</p>
+    <div class="container mt-4">
+        <h1>{{ idea.title }}</h1>
+        <p class="text-muted">Author: {{ idea.author.username }} | Created: {{ idea.created_at|date:"d M Y" }}</p>
 
-    <p><strong>Status:</strong> {{ idea.get_status_display }}</p>
-    <p><strong>Inspiration Coins:</strong> 🪙 {{ idea.inspiration_coins }}</p>
+        <hr>
 
-    <h5>Categories:</h5>
-    <ul>
-        {% for category in idea.category.all %}
-            <li>{{ category.name }}</li>
-        {% endfor %}
-    </ul>
+        <h3>Description</h3>
+        <p>{{ idea.description }}</p>
 
-    {% if user.is_authenticated and user != idea.author %}
-        <form action="{% url 'ideas:support' idea.pk %}" method="post" class="mt-3">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-success">Support this idea! (Spend 50 coins)</button>
-        </form>
-    {% elif not user.is_authenticated %}
-        <p><a href="{% url 'accounts:login' %}">Log in</a> to support this idea.</p>
-    {% endif %}
+        <p><strong>Status:</strong> {{ idea.get_status_display }}</p>
+        <p><strong>Inspiration Coins:</strong> 🪙 {{ idea.inspiration_coins }}</p>
 
-    <div class="mt-4">
-        <a href="{% url 'ideas:list' %}" class="btn btn-outline-secondary">Back to all ideas</a>
+        <h5>Categories:</h5>
+        <ul>
+            {% for category in idea.category.all %}
+                <li>{{ category.name }}</li>
+            {% endfor %}
+        </ul>
+
+        {% if user.is_authenticated and user != idea.author %}
+            <form action="{% url 'ideas:support' idea.pk %}" method="post" class="mt-3">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">Support this idea! (Spend 10 coins)</button>
+            </form>
+        {% elif not user.is_authenticated %}
+            <p><a href="{% url 'accounts:login' %}">Log in</a> to support this idea.</p>
+        {% endif %}
+
+        {% if request.user.is_staff and idea.status == 'PENDING' %}
+            <form action="{% url 'ideas:approve' idea.pk %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn-approve">Approve Idea</button>
+            </form>
+        {% endif %}
+
+        <div class="mt-4">
+            <a href="{% url 'ideas:list' %}" class="btn btn-outline-secondary">Back to all ideas</a>
+        </div>
     </div>
-</div>
 {% endblock %}
