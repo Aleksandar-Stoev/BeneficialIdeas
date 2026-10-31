@@ -10,10 +10,19 @@ class IdeaForm(forms.ModelForm):  # TODO: make a base form
         fields = ['title', 'description', 'category', ]
 
 
-SuppliesFormSet = inlineformset_factory(  # TODO: make it optional
+SuppliesFormSet = inlineformset_factory(
     Idea,
     Supplies,
-    fields=['name', 'quantity', 'is_secured'],  # TODO: remove 'is_secured'
+    fields=['name', 'quantity', 'is_secured'],
     extra=3,
     can_delete=True
 )
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField(
+        label='Търсене',
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': 'Enter a keyword...'})
+    )

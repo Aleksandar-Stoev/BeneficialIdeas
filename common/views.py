@@ -1,26 +1,13 @@
-from django.views.generic import ListView
-from common.forms import SearchForm
+from django.views.generic import TemplateView
 from ideas.models import Idea
 
 
-class HomeView(ListView):
-    model = Idea
+class HomeView(TemplateView):
     template_name = 'common/index.html'
-    context_object_name = 'ideas'
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-
-        self.form = SearchForm(self.request.GET or None)
-
-        if self.form.is_valid():
-            query = self.form.cleaned_data.get('query')
-            if query:
-                queryset = queryset.filter(title__icontains=query)
-
-        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = self.form
+        context['latest_ideas'] = Idea.objects.order_by('-created_at')[:3]
+        context['top_ideas'] = Idea.objects.order_by('-inspiration_coins')[:3]
+        context['total_ideas'] = Idea.objects.count()
         return context

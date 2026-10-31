@@ -5,33 +5,9 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, ListView, DetailView
 from django.db import transaction
+from ideas.mixins import ProjectFormSetMixin
 from ideas.models import Idea
-from ideas.forms import IdeaForm, SuppliesFormSet
-
-
-class ProjectFormSetMixin:
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.method == 'POST':
-            context['formset'] = SuppliesFormSet(self.request.POST, instance=self.object)
-        else:
-            context['formset'] = SuppliesFormSet(instance=self.object)
-        return context
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        formset = context['formset']
-
-        if form.is_valid() and formset.is_valid():
-            with transaction.atomic():
-                self.object = form.save()
-                formset.instance = self.object
-                formset.save()
-
-            return super().form_valid(form)
-
-        else:
-            return self.form_invalid(form)
+from ideas.forms import IdeaForm, SearchForm
 
 
 class IdeaCreateView(LoginRequiredMixin, ProjectFormSetMixin, CreateView):
@@ -56,7 +32,24 @@ class IdeaListView(ListView):
     model = Idea
     template_name = 'ideas/idea_list.html'
     context_object_name = 'ideas'
-    paginate_by = 6
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        self.form = SearchForm(self.request.GET or None)
+
+        if self.form.is_valid():
+            query = self.form.cleaned_data.get('query')
+            if query:
+                queryset = queryset.filter(title__icontains=query)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form
+        return context
 
 
 class IdeaDetailView(DetailView):

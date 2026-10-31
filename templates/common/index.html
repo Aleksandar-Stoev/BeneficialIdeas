@@ -4,47 +4,57 @@
 {% block title %}Home - Beneficial Ideas{% endblock %}
 
 {% block content %}
-    <section class="welcome-section">
+    <section class="welcome-section text-center my-4">
         <h1>Welcome to Beneficial Ideas!</h1>
-        <p>Explore ideas or share your own to make our world a better place.</p>
+        <p>Explore innovative ideas or share your own to make our world a better place.</p>
+        <p class="text-muted">Total ideas shared so far: <strong>{{ total_ideas }}</strong></p>
     </section>
 
     <hr>
 
-    <section class="latest-ideas-section">
-        <h2>Latest Ideas</h2>
-        <form method="get" action="">
-            {{ form.as_p }}
-            <button type="submit">Search</button>
-        </form>
+    <!-- Най-нови идеи -->
+    <section class="latest-ideas-section my-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Latest Ideas</h2>
+            <a href="{% url 'ideas:list' %}" class="btn btn-outline-primary btn-sm">View All Ideas</a>
+        </div>
 
-        {% if ideas %}
-            <div class="ideas-grid">
-                {% for idea in ideas %}
-                    <article class="idea-card">
-                        <h3>
-                            <a href="{% url 'ideas:detail' idea.pk %}">{{ idea.title }}</a>
-                        </h3>
-                        <p>{{ idea.description|truncatechars:100 }}</p>
-                        <p><strong>Author:</strong>
-                            {% if idea.author.profile %}
-                                {{ idea.author.profile.first_name }} {{ idea.author.profile.last_name }}
-                            {% else %}
-                                {{ idea.author.email }}
-                            {% endif %}
-                        </p>
-                        <p><strong>Inspiration Coins:</strong> {{ idea.inspiration_coins }}</p>
-                        <p><strong>Status:</strong> {{ idea.status|status_badge }}</p>
-                    </article>
-                    <hr>
+        {% if latest_ideas %}
+            <div class="row">
+                {% for idea in latest_ideas %}
+                    <div class="col-md-4 mb-3">
+                        <article class="card h-100 p-3">
+                            <h3><a href="{% url 'ideas:detail' idea.pk %}">{{ idea.title }}</a></h3>
+                            <p>{{ idea.description|truncatechars:80 }}</p>
+                            <p><strong>Coins:</strong> {{ idea.inspiration_coins }}</p>
+                            <p><strong>Status:</strong> {{ idea.status|status_badge }}</p>
+                        </article>
+                    </div>
                 {% endfor %}
             </div>
         {% else %}
-            {% if form.query.value %}
-                <p>No ideas match your search criteria. Try a different keyword or <a href="{% url 'home' %}">clear the search</a>.</p>
-            {% else %}
-                <p>No ideas shared yet. Be the first one to <a href="{% url 'ideas:create' %}">create an idea</a>!</p>
-            {% endif %}
+            <p>No ideas shared yet. Be the first one to <a href="{% url 'ideas:create' %}">create an idea</a>!</p>
+        {% endif %}
+    </section>
+
+    <hr>
+
+    <section class="top-ideas-section my-4">
+        <h2>Top Supported Ideas 🔥</h2>
+        {% if top_ideas %}
+            <div class="row">
+                {% for idea in top_ideas %}
+                    <div class="col-md-4 mb-3">
+                        <article class="card h-100 p-3 border-success">
+                            <h3><a href="{% url 'ideas:detail' idea.pk %}">{{ idea.title }}</a></h3>
+                            <p>{{ idea.description|truncatechars:80 }}</p>
+                            <p><strong>Coins:</strong> 🪙 {{ idea.inspiration_coins }}</p>
+                        </article>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No supported ideas yet.</p>
         {% endif %}
     </section>
 {% endblock %}
