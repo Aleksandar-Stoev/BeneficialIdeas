@@ -5,9 +5,10 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, ListView, DetailView
 from django.db import transaction
+from common.forms import SearchForm
 from ideas.mixins import ProjectFormSetMixin
 from ideas.models import Idea
-from ideas.forms import IdeaForm, SearchForm
+from ideas.forms import IdeaForm
 
 
 class IdeaCreateView(LoginRequiredMixin, ProjectFormSetMixin, CreateView):

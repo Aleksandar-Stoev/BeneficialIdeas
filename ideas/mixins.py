@@ -1,5 +1,5 @@
 from django.db import transaction
-from ideas.forms import SuppliesFormSet
+from supplies.forms import SuppliesFormSet
 
 
 class ProjectFormSetMixin:
