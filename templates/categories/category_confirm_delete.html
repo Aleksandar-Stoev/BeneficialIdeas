@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load idea_tags %}
+
+{% block title %}Deleting a category{% endblock %}
+
+{% block content %}
+<h1>Are you sure you want to delete the category „{{ object.name }}“?</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, delete</button>
+        <a href="{% url 'categories:list' %}">Cancel</a>
+    </form>
+{% endblock %}

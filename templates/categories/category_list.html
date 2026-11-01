@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load idea_tags %}
+
+{% block title %}List of categories{% endblock %}
+
+{% block content %}
+<h1>List of categories</h1>
+
+    <a href="{% url 'categories:create' %}">+ Create new category</a>
+
+    <ul>
+        {% for category in categories %}
+            <li>
+                <strong>{{ category.name }}</strong> (<em>{{ category.slug }}</em>)
+                <br>
+                {{ category.description }}
+                <br>
+                <a href="{% url 'categories:delete' category.pk %}">Delete</a>
+                <hr>
+            </li>
+        {% empty %}
+            <li>No categories created yet.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

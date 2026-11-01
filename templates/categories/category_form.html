@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load idea_tags %}
+
+{% block title %}Creating a category{% endblock %}
+
+{% block content %}
+<h1>Creating a new category</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+
+<br>
+<a href="{% url 'categories:list' %}">Back to the list</a>
+{% endblock %}
