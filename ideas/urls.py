@@ -10,6 +10,7 @@ urlpatterns = [
     path('<int:pk>/', include([
         path('', views.IdeaDetailView.as_view(), name='detail'),
         path('edit/', views.IdeaUpdateView.as_view(), name='edit'),
+        path('delete/', views.IdeaDeleteView.as_view(), name='delete'),
         path('support/', views.support_idea_view, name='support'),
         path('approve/', approve_idea_view, name='approve'),
     ]))

@@ -3,30 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, ListView, DetailView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView, DeleteView
 from django.db import transaction
 from common.forms import SearchForm
 from ideas.mixins import ProjectFormSetMixin
 from ideas.models import Idea
-from ideas.forms import IdeaForm
-
-
-class IdeaCreateView(LoginRequiredMixin, ProjectFormSetMixin, CreateView):
-    model = Idea
-    form_class = IdeaForm
-    template_name = 'ideas/manage_idea.html'
-    success_url = reverse_lazy('ideas:list')
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
-
-
-class IdeaUpdateView(LoginRequiredMixin, ProjectFormSetMixin, UpdateView):
-    model = Idea
-    form_class = IdeaForm
-    template_name = 'ideas/manage_idea.html'
-    success_url = reverse_lazy('ideas:list')
+from ideas.forms import IdeaCreateForm, IdeaUpdateForm, IdeaDeleteForm
 
 
 class IdeaListView(ListView):
@@ -53,10 +35,35 @@ class IdeaListView(ListView):
         return context
 
 
+class IdeaCreateView(LoginRequiredMixin, ProjectFormSetMixin, CreateView):
+    model = Idea
+    form_class = IdeaCreateForm
+    template_name = 'ideas/manage_idea.html'
+    success_url = reverse_lazy('ideas:list')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+
+class IdeaUpdateView(LoginRequiredMixin, ProjectFormSetMixin, UpdateView):
+    model = Idea
+    form_class = IdeaUpdateForm
+    template_name = 'ideas/manage_idea.html'
+    success_url = reverse_lazy('ideas:list')
+
+
 class IdeaDetailView(DetailView):
     model = Idea
     template_name = 'ideas/idea_detail.html'
     context_object_name = 'idea'
+
+
+class IdeaDeleteView(LoginRequiredMixin, DeleteView):
+    model = Idea
+    form_class = IdeaDeleteForm
+    template_name = 'ideas/idea_delete.html'
+    success_url = reverse_lazy('ideas:list')
 
 
 @login_required
