@@ -6,7 +6,7 @@ from categories.models import Category
 
 class CategoryCreateView(StaffRequiredMixin, CreateView):
     model = Category
-    fields = ['name', 'slug', 'description']
+    fields = ['name', 'description']
     template_name = 'categories/category_form.html'
     success_url = reverse_lazy('categories:list')
 

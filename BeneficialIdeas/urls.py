@@ -8,5 +8,4 @@ urlpatterns = [
     path('categories/', include('categories.urls')),
     path('ideas/', include('ideas.urls')),
     path('supplies/', include('supplies.urls')),
-    path('categories/', include('categories.urls')),
 ]

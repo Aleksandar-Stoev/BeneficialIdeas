@@ -15,7 +15,7 @@
                 <br>
                 {{ category.description }}
                 <br>
-                <a href="{% url 'categories:delete' category.pk %}">Delete</a>
+                <a href="{% url 'categories:delete' category.slug %}">Delete</a>
                 <hr>
             </li>
         {% empty %}
