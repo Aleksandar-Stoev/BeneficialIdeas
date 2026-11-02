@@ -3,33 +3,39 @@
 {% block title %}Entry | Beneficial Ideas{% endblock %}
 
 {% block content %}
-  <h2>Login to BeneficialIdeas</h2>
+    <h2>Login to BeneficialIdeas</h2>
 
-  <form method="post">
-    {% csrf_token %}
+    <form method="post">
+        {% csrf_token %}
 
-    {% if form.non_field_errors %}
-      <div style="color: red;">
-        {% for error in form.non_field_errors %}
-          <p>{{ error }}</p>
-        {% endfor %}
-      </div>
-    {% endif %}
+        {% if form.non_field_errors %}
+            <div style="color: red;">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
 
-    <div>
-      <label for="id_username">Email address:</label><br>
-      <input type="email" name="username" id="id_username" required autocomplete="email">
-    </div>
+        <div>
+            {% if form.username.errors %}
+                <div style="color: red;">{{ form.username.errors }}</div>
+            {% endif %}
+            <label for="{{ form.username.id_for_label }}">{{ form.username.label }}:</label><br>
+            {{ form.username }}
+        </div>
 
-    <br>
+        <br>
 
-    <div>
-      <label for="id_password">Password:</label><br>
-      <input type="password" name="password" id="id_password" required autocomplete="current-password">
-    </div>
+        <div>
+            {% if form.password.errors %}
+                <div style="color: red;">{{ form.password.errors }}</div>
+            {% endif %}
+            <label for="{{ form.password.id_for_label }}">{{ form.password.label }}:</label><br>
+            {{ form.password }}
+        </div>
 
-    <br>
+        <br>
 
-    <button type="submit">Log in</button>
-  </form>
+        <button type="submit">Log in</button>
+    </form>
 {% endblock %}
