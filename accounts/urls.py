@@ -1,7 +1,7 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path, include
-from . import views
-from .forms import EmailAuthenticationForm
+from accounts import views
+from accounts.forms import EmailAuthenticationForm
 
 app_name = 'accounts'
 
