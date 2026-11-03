@@ -1,14 +1,15 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, DeleteView
-from django.db import transaction
-from common.forms import SearchForm
+
+from common.forms import SearchForm, CommentForm
+from ideas.forms import IdeaCreateForm, IdeaUpdateForm, IdeaDeleteForm
 from ideas.mixins import ProjectFormSetMixin
 from ideas.models import Idea
-from ideas.forms import IdeaCreateForm, IdeaUpdateForm, IdeaDeleteForm
 
 
 class IdeaListView(ListView):
@@ -58,6 +59,11 @@ class IdeaDetailView(DetailView):
     template_name = 'ideas/idea_detail.html'
     context_object_name = 'idea'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comment_form'] = CommentForm()
+        return context
+
 
 class IdeaDeleteView(LoginRequiredMixin, DeleteView):
     model = Idea
@@ -71,21 +77,24 @@ def support_idea_view(request, pk):
     idea = get_object_or_404(Idea, pk=pk)
     profile = request.user.profile
 
-    if idea.author != request.user and idea not in profile.supported_ideas.all():
-        if profile.inspiration_coins >= 10:
-            with transaction.atomic():
+    is_author = (idea.author == request.user)
+    is_already_supported = idea in profile.supported_ideas.all()
+    has_enough_coins = profile.inspiration_coins >= 10
 
-                profile.inspiration_coins -= 10
-                profile.save()
+    if not is_author and not is_already_supported and has_enough_coins:
+        with transaction.atomic():
 
-                idea.inspiration_coins += 10
+            profile.inspiration_coins -= 10
+            profile.save()
 
-                if idea.inspiration_coins >= 100 and idea.status == Idea.StatusChoices.PENDING:
-                    idea.status = Idea.StatusChoices.APPROVED
+            idea.inspiration_coins += 10
 
-                idea.save()
+            if idea.inspiration_coins >= 100 and idea.status == Idea.StatusChoices.PENDING:
+                idea.status = Idea.StatusChoices.APPROVED
 
-                profile.supported_ideas.add(idea)
+            idea.save()
+
+            profile.supported_ideas.add(idea)
 
     return redirect('ideas:detail', pk=idea.pk)
 

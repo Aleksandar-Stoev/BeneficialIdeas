@@ -1,4 +1,7 @@
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import TemplateView
+from common.forms import CommentForm
 from ideas.models import Idea
 
 
@@ -11,3 +14,21 @@ class HomeView(TemplateView):
         context['top_ideas'] = Idea.objects.order_by('-inspiration_coins')[:3]
         context['total_ideas'] = Idea.objects.count()
         return context
+
+
+@login_required
+def add_comment(request, pk):
+  if request.method == 'POST':
+    idea = get_object_or_404(Idea, pk=pk)
+    form = CommentForm(request.POST)
+
+    if form.is_valid():
+      comment = form.save(commit=False)
+      comment.idea = idea
+      comment.author = request.user
+      comment.save()
+
+    referer = request.META.get('HTTP_REFERER', 'home')
+    return redirect(f'{referer}#idea-{pk}')
+
+  return redirect('home')
