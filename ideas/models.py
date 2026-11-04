@@ -21,7 +21,7 @@ class Idea(models.Model):
 
     description = models.TextField(
         verbose_name='Description',
-        help_text='Describe how this idea will improve the world.',
+        help_text='Describe the benefits of your idea.',
     )
 
     author = models.ForeignKey(
@@ -35,6 +35,8 @@ class Idea(models.Model):
         'categories.Category',
         related_name='ideas',
         verbose_name='Category',
+        null=True,
+        blank=True,
     )
 
     inspiration_coins = models.PositiveIntegerField(  # TODO: signals for received inspiration_coins

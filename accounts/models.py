@@ -30,9 +30,16 @@ class Profile(models.Model):
     )
 
     first_name = models.CharField(max_length=30)
+
     last_name = models.CharField(max_length=30)
-    profile_image = models.ImageField(upload_to='profile_pics/', blank=True, null=True)  # TODO: Add a default image and validation for image size and type
+
+    profile_image = models.ImageField(
+        upload_to='profile_pics/',
+        blank=True,
+        null=True)  # TODO: Add a default image and validation for image size and type
+
     inspiration_coins = models.PositiveIntegerField(default=0)
+
     supported_ideas = models.ManyToManyField(
         'ideas.Idea',
         related_name='supporters',
