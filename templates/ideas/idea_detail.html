@@ -1,17 +1,22 @@
 {% extends 'base.html' %}
+{% load idea_tags %}
 
 {% block content %}
     <div class="container mt-4">
         <h1>{{ idea.title }}</h1>
-        <p class="text-muted">Author: {{ idea.author.username }} | Created: {{ idea.created_at|date:"d M Y" }}</p>
+        <p class="text-muted">Author: {{ idea.author.email }} | Created: {{ idea.created_at|date:"d M Y" }}</p>
+        {% if user.is_authenticated and user == idea.author %}
+            <a href="{% url 'ideas:edit' idea.pk %}" class="btn btn-primary">Edit the idea</a>
+            <a href="{% url 'ideas:delete' idea.pk %}" class="btn btn-danger">Delete the idea</a>
+        {% endif %}
 
         <hr>
 
         <h3>Description</h3>
         <p>{{ idea.description }}</p>
 
-        <p><strong>Status:</strong> {{ idea.get_status_display }}</p>
-{#        {% if not idea.status == 'APPROVED' %}#}
+        <p><strong>Status:</strong> {{ idea.status|status_badge }}</p>
+        {% if not idea.status == 'APPROVED' %}
             <p><strong>Inspiration Coins:</strong> 🪙 {{ idea.inspiration_coins }}</p>
             {% if not user.is_authenticated %}
                 <p><a href="{% url 'accounts:login' %}">Login</a> or <a href="{% url 'accounts:register' %}">register</a> to support this idea.</p>
@@ -27,12 +32,14 @@
                     <button type="submit" class="btn btn-success">Support this idea! (Spend 10 coins)</button>
                 </form>
             {% endif %}
-{#        {% endif %}#}
+        {% endif %}
 
         <h5>Categories:</h5>
         <ul>
             {% for category in idea.category.all %}
                 <li>{{ category.name }}</li>
+            {% empty %}
+                <li>No categories assigned.</li>
             {% endfor %}
         </ul>
 

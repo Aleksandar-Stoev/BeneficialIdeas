@@ -51,8 +51,9 @@ class IdeaUpdateView(LoginRequiredMixin, ProjectFormSetMixin, UpdateView):
     model = Idea
     form_class = IdeaUpdateForm
     template_name = 'ideas/manage_idea.html'
-    success_url = reverse_lazy('ideas:list')
 
+    def get_success_url(self):
+        return reverse_lazy('ideas:detail', kwargs={'pk': self.object.pk})
 
 class IdeaDetailView(DetailView):
     model = Idea
@@ -70,6 +71,11 @@ class IdeaDeleteView(LoginRequiredMixin, DeleteView):
     form_class = IdeaDeleteForm
     template_name = 'ideas/idea_delete.html'
     success_url = reverse_lazy('ideas:list')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.object
+        return kwargs
 
 
 @login_required
