@@ -1,23 +1,49 @@
-<nav>
-    <ul>
-        <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'ideas:list' %}">All Ideas</a></li>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}">💡 Beneficial Ideas</a>
 
-        {% if request.user.is_authenticated %}
-            <li><a href="{% url 'ideas:create' %}">Create Idea</a></li>
-            <li><a href="{% url 'accounts:details' pk=request.user.pk %}">My Profile</a></li>
-            <form action="{% url 'accounts:logout' %}" style="display: inline;" method="post">
-                {% csrf_token %}
-                <button type="submit">Logout</button>
-            </form>
-            {% if request.user.is_staff %}
-                <p>
-                    <a href="{% url 'categories:list' %}">List of categories</a>
-                </p>
-            {% endif %}
-        {% else %}
-            <li><a href="{% url 'accounts:login' %}">Login</a></li>
-            <li><a href="{% url 'accounts:register' %}">Register</a></li>
-        {% endif %}
-    </ul>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'ideas:list' %}">All Ideas</a>
+                </li>
+
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'ideas:create' %}">Create Idea</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:details' pk=request.user.pk %}">My Profile</a>
+                    </li>
+
+                    {% if request.user.is_staff %}
+                        <li class="nav-item">
+                            <a class="nav-link text-warning" href="{% url 'categories:list' %}">Categories (Admin)</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="nav-item ms-lg-3">
+                        <form action="{% url 'accounts:logout' %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-primary btn-sm" href="{% url 'accounts:register' %}">Register</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
 </nav>

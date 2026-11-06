@@ -1,17 +1,38 @@
 {% extends 'base.html' %}
 
-{% block title %}Delete account{% endblock %}
+{% block title %}Delete Account{% endblock %}
 
 {% block content %}
-<section class="delete-container">
-    <h1>Attention! Deleting an account</h1>
-    <p>Are you sure you want to delete your profile? This action is irreversible!</p>
+<div class="row justify-content-center mt-5 mb-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow border-danger">
+            <div class="card-header bg-danger text-white fw-bold">
+                ⚠️ Account Deletion Warning
+            </div>
+            <div class="card-body p-4 text-center">
+                <h1 class="h4 card-title text-danger mb-3">Deleting Your Account</h1>
+                <p class="card-text text-muted mb-4">
+                    Are you sure you want to delete your profile? This action is irreversible!
+                </p>
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn-danger">Yes, I confirm the deletion.</button>
-        <a href="{% url 'accounts:details' pk=object.pk %}" class="btn-cancel">Refusal</a>
-    </form>
-</section>
+                <form method="POST">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger py-2 small mb-3">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    {{ form.as_p }}
+
+                    <div class="d-flex justify-content-center gap-2 mt-4">
+                        <button type="submit" class="btn btn-danger px-4">Yes, I confirm</button>
+                        <a href="{% url 'accounts:details' pk=object.pk %}" class="btn btn-outline-secondary px-4">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -7,7 +7,7 @@ register = template.Library()
 @register.filter
 def status_badge(value):
     badges = {
-        'PENDING': '⚠️ Pending review',
+        'PENDING': '⚠️ Pending approval',
         'REVIEW': '👀 Under review',
         'APPROVED': '✅ Approved',
     }

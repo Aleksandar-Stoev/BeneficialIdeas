@@ -1,17 +1,33 @@
 {% extends 'base.html' %}
 {% load idea_tags %}
 
-{% block title %}Creating a category{% endblock %}
+{% block title %}Creating a Category{% endblock %}
 
 {% block content %}
-<h1>Creating a new category</h1>
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0 p-4">
+            <h1 class="h3 fw-bold text-dark mb-4 text-center">Creating a New Category</h1>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-</form>
+            <form method="post" novalidate>
+                {% csrf_token %}
 
-<br>
-<a href="{% url 'categories:list' %}">Back to the list</a>
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="mb-3">
+                    {{ form.as_p }}
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                    <a href="{% url 'categories:list' %}" class="text-decoration-none text-muted">&larr; Back to the list</a>
+                    <button type="submit" class="btn btn-primary px-4">Save Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

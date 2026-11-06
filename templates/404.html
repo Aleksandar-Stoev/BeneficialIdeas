@@ -1,12 +1,18 @@
 {% extends 'base.html' %}
 
+{% block title %}404 - Page Not Found{% endblock %}
+
 {% block content %}
-<div class="container text-center mt-5">
-    <h1 class="display-1 text-muted">404</h1>
-    <h2 class="mb-3">Page Not Found</h2>
-    <p class="text-muted mb-4">
-        Oops! The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
-    </p>
-    <a href="{% url 'home' %}" class="btn btn-primary">Go to the Home Page</a>
+<div class="row justify-content-center text-center mt-5 mb-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm border-0 p-5">
+            <div class="display-1 fw-bold text-danger mb-3">404</div>
+            <h1 class="h3 fw-bold text-dark mb-3">Page Not Found</h1>
+            <p class="text-muted mb-4">
+                Oops! The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+            </p>
+            <a href="{% url 'home' %}" class="btn btn-primary px-4">Back to Home</a>
+        </div>
+    </div>
 </div>
 {% endblock %}

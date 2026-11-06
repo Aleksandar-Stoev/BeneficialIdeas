@@ -1,80 +1,168 @@
 {% extends 'base.html' %}
 {% load idea_tags %}
 
+{% block title %}{{ idea.title }} | Beneficial Ideas{% endblock %}
+
 {% block content %}
-    <div class="container mt-4">
-        <h1>{{ idea.title }}</h1>
-        <p class="text-muted">Author: {{ idea.author.email }} | Created: {{ idea.created_at|date:"d M Y" }}</p>
-        {% if user.is_authenticated and user == idea.author %}
-            <a href="{% url 'ideas:edit' idea.pk %}" class="btn btn-primary">Edit the idea</a>
-            <a href="{% url 'ideas:delete' idea.pk %}" class="btn btn-danger">Delete the idea</a>
-        {% endif %}
+<div class="row justify-content-center mb-5">
+    <div class="col-lg-10">
 
-        <hr>
-
-        <h3>Description</h3>
-        <p>{{ idea.description }}</p>
-
-        <p><strong>Status:</strong> {{ idea.status|status_badge }}</p>
-        {% if not idea.status == 'APPROVED' %}
-            <p><strong>Inspiration Coins:</strong> 🪙 {{ idea.inspiration_coins }}</p>
-            {% if not user.is_authenticated %}
-                <p><a href="{% url 'accounts:login' %}">Login</a> or <a href="{% url 'accounts:register' %}">register</a> to support this idea.</p>
-            {% elif user == idea.author %}
-                <p class="text-muted">You created this idea.</p>
-            {% elif idea in user.profile.supported_ideas.all %}
-                <p class="text-success">You have already supported this idea!</p>
-            {% elif user.profile.inspiration_coins < 10 %}
-                <p class="text-danger"><a href="{% url 'ideas:create' %}">Create</a> an idea to gain inspiration coins and support this idea!</p>
-            {% else %}
-                <form action="{% url 'ideas:support' idea.pk %}" method="post" class="mt-3">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-success">Support this idea! (Spend 10 coins)</button>
-                </form>
-            {% endif %}
-        {% endif %}
-
-        <h5>Categories:</h5>
-        <ul>
-            {% for category in idea.category.all %}
-                <li>{{ category.name }}</li>
-            {% empty %}
-                <li>No categories assigned.</li>
-            {% endfor %}
-        </ul>
-
-        <section class="comments-section">
-            <h3>Comments</h3>
-
-            {% for comment in idea.comments.all %}
-                <div class="comment" id="idea-{{ idea.pk }}">
-                    <p><strong>{{ comment.author.email }}:</strong> {{ comment.text }}</p>
-                    <small>{{ comment.created_at|date:"Y-m-d H:i" }}</small>
-                </div>
-            {% empty %}
-                <p>No comments yet. Be the first to comment!</p>
-            {% endfor %}
-
-            {% if request.user.is_authenticated %}
-                <form action="{% url 'add_comment' idea.pk %}" method="post">
-                    {% csrf_token %}
-                    {{ comment_form.as_p }}
-                    <button type="submit">Post Comment</button>
-                </form>
-            {% else %}
-                <p><a href="{% url 'accounts:login' %}">Login</a> or <a href="{% url 'accounts:register' %}">register</a> to leave a comment.</p>
-            {% endif %}
-        </section>
-
-        {% if request.user.is_staff and idea.status == 'PENDING' %}
-            <form action="{% url 'ideas:approve' idea.pk %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn-approve">Approve Idea</button>
-            </form>
-        {% endif %}
-
-        <div class="mt-4">
-            <a href="{% url 'ideas:list' %}" class="btn btn-outline-secondary">Back to all ideas</a>
+        <div class="mb-3">
+            <a href="{% url 'ideas:list' %}" class="text-decoration-none text-muted">&larr; Back to all ideas</a>
         </div>
+
+        <div class="card shadow-sm border-0 p-4 p-md-5 mb-4">
+
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center border-bottom pb-3 mb-4">
+                <div>
+                    <h1 class="h2 fw-bold text-dark mb-2">{{ idea.title }}</h1>
+                    <p class="text-muted small mb-0">
+                        Author: <span class="fw-semibold">{{ idea.author.email }}</span> | Created: {{ idea.created_at|date:"d M Y" }}
+                    </p>
+                </div>
+
+                {% if user.is_authenticated and user == idea.author %}
+                    <div class="d-flex gap-2 mt-3 mt-md-0">
+                        <a href="{% url 'ideas:edit' idea.pk %}" class="btn btn-outline-primary btn-sm">Edit Idea</a>
+                        <a href="{% url 'ideas:delete' idea.pk %}" class="btn btn-outline-danger btn-sm">Delete Idea</a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                <h3 class="h5 fw-bold text-secondary mb-3">Description</h3>
+                <p class="lead fs-6 text-dark" style="white-space: pre-line;">{{ idea.description }}</p>
+            </div>
+
+            <div class="d-flex flex-wrap align-items-center gap-3 bg-light p-3 rounded-3 mb-4 border">
+                <div>
+                    <strong>Status:</strong> {{ idea.status|status_badge }}
+                </div>
+                {% if not idea.status == 'APPROVED' %}
+                    <div>
+                        <strong>Inspiration Coins:</strong> <span class="badge bg-warning text-dark fs-6">🪙 {{ idea.inspiration_coins }}</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if not idea.status == 'APPROVED' %}
+                <div class="card bg-white border-0 shadow-sm p-4 mb-4 border-start border-warning border-4">
+                    <h4 class="h6 fw-bold mb-3">Support this Idea</h4>
+
+                    {% if not user.is_authenticated %}
+                        <p class="mb-0 text-muted">
+                            <a href="{% url 'accounts:login' %}" class="fw-semibold">Login</a> or <a href="{% url 'accounts:register' %}" class="fw-semibold">register</a> to support this idea.
+                        </p>
+                    {% elif user == idea.author %}
+                        <p class="mb-0 text-muted fst-italic">You created this idea.</p>
+                    {% elif idea in user.profile.supported_ideas.all %}
+                        <div class="alert alert-success py-2 mb-0">
+                            ✅ You have already supported this idea!
+                        </div>
+                    {% elif user.profile.inspiration_coins < 10 %}
+                        <div class="alert alert-warning py-2 mb-0">
+                            ⚠️ You need at least 10 coins. <a href="{% url 'ideas:create' %}" class="alert-link fw-semibold">Create an idea</a> to gain inspiration coins!
+                        </div>
+                    {% else %}
+                        <form action="{% url 'ideas:support' idea.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-warning fw-bold text-dark px-4">Support this idea! (Spend 10 coins 🪙)</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            <div class="row g-4 mb-4">
+                <!-- Категории -->
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-3 h-100 border">
+                        <h3 class="h6 fw-bold text-secondary mb-3">📁 Categories</h3>
+                        <div class="d-flex flex-wrap gap-1">
+                            {% for category in idea.category.all %}
+                                <span class="badge bg-secondary text-white">{{ category.name }}</span>
+                            {% empty %}
+                                <span class="text-muted small fst-italic">No categories assigned.</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-3 h-100 border">
+                        <h3 class="h6 fw-bold text-secondary mb-3">🛠️ Supplies Needed</h3>
+                        {% if idea.supplies.all %}
+                            <ul class="list-unstyled mb-0 small">
+                                {% for supply in idea.supplies.all %}
+                                    <li class="mb-2 pb-2 border-bottom d-flex justify-content-between align-items-center">
+                                        <span><strong>{{ supply.name }}</strong> (Qty: {{ supply.quantity }})</span>
+                                        <span>Secured:
+                                            {% if supply.is_secured %}
+                                                <span class="badge bg-success">Yes</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">No</span>
+                                            {% endif %}
+                                        </span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-muted small fst-italic mb-0">No supplies listed.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {% if request.user.is_staff and idea.status == 'PENDING' %}
+                <div class="card bg-info bg-opacity-10 border-info p-3 mb-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-semibold text-dark">Admin Action: This idea is pending approval.</span>
+                        <form action="{% url 'ideas:approve' idea.pk %}" method="post" class="m-0">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success btn-sm fw-bold px-3">Approve Idea</button>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+
+        <div class="card shadow-sm border-0 p-4 p-md-5">
+            <h3 class="h4 fw-bold text-dark mb-4">💬 Comments</h3>
+
+            <div class="comments-list mb-4">
+                {% for comment in idea.comments.all %}
+                    <div class="card bg-light border-0 p-3 mb-3" id="comment-{{ comment.pk }}">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-bold text-primary small">{{ comment.author.email }}</span>
+                            <small class="text-muted" style="font-size: 0.75rem;">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+                        </div>
+                        <p class="mb-0 text-dark small">{{ comment.text }}</p>
+                    </div>
+                {% empty %}
+                    <p class="text-muted fst-italic text-center py-3">No comments yet. Be the first to comment!</p>
+                {% endfor %}
+            </div>
+
+            <div class="border-top pt-4">
+                {% if request.user.is_authenticated %}
+                    <h5 class="h6 fw-bold mb-3">Leave a comment</h5>
+                    <form action="{% url 'add_comment' idea.pk %}" method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ comment_form.as_p }}
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm px-4">Post Comment</button>
+                    </form>
+                {% else %}
+                    <div class="text-center py-3 bg-light rounded-3">
+                        <p class="mb-0 text-muted small">
+                            <a href="{% url 'accounts:login' %}" class="fw-semibold">Login</a> or <a href="{% url 'accounts:register' %}" class="fw-semibold">register</a> to leave a comment.
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
     </div>
+</div>
 {% endblock %}
