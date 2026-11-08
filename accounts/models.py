@@ -2,8 +2,8 @@ from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
-
 from accounts.managers import BenevolentUserManager
+from accounts.validators import FileSizeValidator
 
 
 class BenevolentUser(AbstractBaseUser, PermissionsMixin):
@@ -36,7 +36,11 @@ class Profile(models.Model):
     profile_image = models.ImageField(
         upload_to='profile_pics/',
         blank=True,
-        null=True)  # TODO: Add a default image and validation for image size and type
+        null=True,
+        validators=[
+            FileSizeValidator(3)
+        ]
+    )
 
     inspiration_coins = models.PositiveIntegerField(default=0)
 
