@@ -39,7 +39,7 @@ class Idea(models.Model):
         blank=True,
     )
 
-    inspiration_coins = models.PositiveIntegerField(  # TODO: signals for received inspiration_coins
+    inspiration_coins = models.PositiveIntegerField(
         default=0,
         verbose_name='Collected inspiration_coins',
     )

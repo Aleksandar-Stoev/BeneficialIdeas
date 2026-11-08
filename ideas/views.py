@@ -84,7 +84,7 @@ def support_idea_view(request, pk):
     profile = request.user.profile
 
     is_author = (idea.author == request.user)
-    is_already_supported = idea in profile.supported_ideas.all()
+    is_already_supported = profile.supported_ideas.filter(pk=idea.pk).exists()
     has_enough_coins = profile.inspiration_coins >= 10
 
     if not is_author and not is_already_supported and has_enough_coins:

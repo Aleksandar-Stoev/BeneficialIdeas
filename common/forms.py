@@ -5,7 +5,7 @@ from common.models import Comment
 
 class SearchForm(forms.Form):
     query = forms.CharField(
-        label='Търсене',
+        label='Search',
         max_length=100,
         required=False,
         widget=forms.TextInput(attrs={'placeholder': 'Enter a keyword...'})
