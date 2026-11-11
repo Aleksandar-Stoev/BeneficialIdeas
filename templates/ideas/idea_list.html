@@ -37,6 +37,7 @@
                                         <strong>Author:</strong>
                                         {% if idea.author.profile %}
                                             {{ idea.author.profile.first_name }} {{ idea.author.profile.last_name }}
+                                            <span class="fw-semibold">({{ idea.author.email }})</span>
                                         {% else %}
                                             {{ idea.author.email }}
                                         {% endif %}
@@ -72,7 +73,6 @@
         </div>
     </div>
 
-    <!-- Пагинация -->
     {% if is_paginated %}
         <nav aria-label="Page navigation" class="mt-5">
             <ul class="pagination justify-content-center">
