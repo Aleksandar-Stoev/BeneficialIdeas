@@ -21,7 +21,7 @@
                     </p>
                 </div>
 
-                {% if user.is_authenticated and user == idea.author %}
+                {% if request.user.is_authenticated and request.user == idea.author %}
                     <div class="d-flex gap-2 mt-3 mt-md-0">
                         <a href="{% url 'ideas:edit' idea.pk %}" class="btn btn-outline-primary btn-sm">Edit Idea</a>
                         <a href="{% url 'ideas:delete' idea.pk %}" class="btn btn-outline-danger btn-sm">Delete Idea</a>
@@ -38,28 +38,28 @@
                 <div>
                     <strong>Status:</strong> {{ idea.status|status_badge }}
                 </div>
-                {% if not idea.status == 'APPROVED' %}
+                {% if idea.status != 'APPROVED' %}
                     <div>
                         <strong>Inspiration Coins:</strong> <span class="badge bg-warning text-dark fs-6">🪙 {{ idea.inspiration_coins }}</span>
                     </div>
                 {% endif %}
             </div>
 
-            {% if not idea.status == 'APPROVED' %}
+            {% if idea.status != 'APPROVED' %}
                 <div class="card bg-white border-0 shadow-sm p-4 mb-4 border-start border-warning border-4">
                     <h4 class="h6 fw-bold mb-3">Support this Idea</h4>
 
-                    {% if not user.is_authenticated %}
+                    {% if not request.user.is_authenticated %}
                         <p class="mb-0 text-muted">
                             <a href="{% url 'accounts:login' %}" class="fw-semibold">Login</a> or <a href="{% url 'accounts:register' %}" class="fw-semibold">register</a> to support this idea.
                         </p>
-                    {% elif user == idea.author %}
+                    {% elif request.user == idea.author %}
                         <p class="mb-0 text-muted fst-italic">You created this idea.</p>
-                    {% elif idea in user.profile.supported_ideas.all %}
+                    {% elif idea in request.user.profile.supported_ideas.all %}
                         <div class="alert alert-success py-2 mb-0">
                             ✅ You have already supported this idea!
                         </div>
-                    {% elif user.profile.inspiration_coins < 10 %}
+                    {% elif request.user.profile.inspiration_coins < 10 %}
                         <div class="alert alert-warning py-2 mb-0">
                             ⚠️ You need at least 10 coins. <a href="{% url 'ideas:create' %}" class="alert-link fw-semibold">Create an idea</a> to gain inspiration coins!
                         </div>

@@ -5,8 +5,8 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, DeleteView
-
 from common.forms import SearchForm, CommentForm
+from common.mixins import AuthorRequiredMixin
 from ideas.forms import IdeaCreateForm, IdeaUpdateForm, IdeaDeleteForm
 from ideas.mixins import ProjectFormSetMixin
 from ideas.models import Idea
@@ -47,7 +47,7 @@ class IdeaCreateView(LoginRequiredMixin, ProjectFormSetMixin, CreateView):
         return super().form_valid(form)
 
 
-class IdeaUpdateView(LoginRequiredMixin, ProjectFormSetMixin, UpdateView):
+class IdeaUpdateView(AuthorRequiredMixin, ProjectFormSetMixin, UpdateView):
     model = Idea
     form_class = IdeaUpdateForm
     template_name = 'ideas/manage_idea.html'
@@ -65,8 +65,16 @@ class IdeaDetailView(DetailView):
         context['comment_form'] = CommentForm()
         return context
 
+    def get_queryset(self):
+        return (
+            super()
+            .get_queryset()
+            .select_related('author')
+            .prefetch_related('category', 'supplies', 'comments__author')
+        )
 
-class IdeaDeleteView(LoginRequiredMixin, DeleteView):
+
+class IdeaDeleteView(AuthorRequiredMixin, DeleteView):
     model = Idea
     form_class = IdeaDeleteForm
     template_name = 'ideas/idea_delete.html'

@@ -29,9 +29,9 @@ class Profile(models.Model):
         related_name="profile",
     )
 
-    first_name = models.CharField(max_length=30)
+    first_name = models.CharField(max_length=30, blank=True)
 
-    last_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30, blank=True)
 
     profile_image = models.ImageField(
         upload_to='profile_pics/',
