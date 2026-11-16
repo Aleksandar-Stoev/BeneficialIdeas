@@ -3,10 +3,10 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from accounts.models import Profile
 
-UserModel = get_user_model()
+User = get_user_model()
 
 
-@receiver(post_save, sender=UserModel)
+@receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.get_or_create(user=instance)

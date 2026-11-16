@@ -19,7 +19,7 @@ class Idea(models.Model):
         help_text=(
             'Enter a short and catchy title (minimum 5 characters).'
         ),
-        validators=[MinLengthValidator(5)]
+        validators=[MinLengthValidator(2)]
     )
 
     description = models.TextField(
