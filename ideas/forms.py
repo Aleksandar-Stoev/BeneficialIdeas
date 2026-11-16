@@ -15,7 +15,12 @@ class IdeaBaseForm(forms.ModelForm):
         error_messages = {
             'title': {
                 'unique': 'The title of your idea should be unique, we already have an idea with this title',
-            }
+                'required': 'Every great idea needs a name — please enter a title.',
+                'max_length': 'Your title is a bit too long. Please keep it short and punchy (under 150 characters).',
+            },
+            'description': {
+                'required': 'Please provide a description so others can understand your idea.',
+            },
         }
 
 
