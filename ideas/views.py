@@ -99,14 +99,14 @@ def support_idea_view(request, pk):
         with transaction.atomic():
 
             profile.inspiration_coins -= 10
-            profile.save()
+            profile.save(update_fields=['inspiration_coins'])
 
             idea.inspiration_coins += 10
 
             if idea.inspiration_coins >= 100 and idea.status == Idea.StatusChoices.PENDING:
                 idea.status = Idea.StatusChoices.APPROVED
 
-            idea.save()
+            idea.save(update_fields=['inspiration_coins', 'status', 'updated_at'])
 
             profile.supported_ideas.add(idea)
 

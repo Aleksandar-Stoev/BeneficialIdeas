@@ -1,14 +1,16 @@
 from django.contrib.auth import get_user_model
+from django.core.validators import MinLengthValidator
 from django.db import models, transaction
+from django.db.models import F
 
 User = get_user_model()
 
 
 class Idea(models.Model):
     class StatusChoices(models.TextChoices):
-        PENDING = 'PENDING',
-        REVIEW = 'REVIEW',
-        APPROVED = 'APPROVED',
+        PENDING = 'PENDING', 'Pending'
+        REVIEW = 'REVIEW', 'In Review'
+        APPROVED = 'APPROVED', 'Approved'
 
     title = models.CharField(
         max_length=150,
@@ -17,6 +19,7 @@ class Idea(models.Model):
         help_text=(
             'Enter a short and catchy title (minimum 5 characters).'
         ),
+        validators=[MinLengthValidator(5)]
     )
 
     description = models.TextField(
@@ -35,7 +38,6 @@ class Idea(models.Model):
         'categories.Category',
         related_name='ideas',
         verbose_name='Category',
-        null=True,
         blank=True,
     )
 
@@ -66,8 +68,8 @@ class Idea(models.Model):
                 super().save(*args, **kwargs)
                 if self.author and hasattr(self.author, 'profile'):
                     profile = self.author.profile
-                    profile.inspiration_coins += 100
-                    profile.save()
+                    profile.inspiration_coins = F('inspiration_coins') + 100
+                    profile.save(update_fields=['inspiration_coins'])
         else:
             super().save(*args, **kwargs)
 
