@@ -1,11 +1,16 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
-from unfold.admin import ModelAdmin
+from unfold.admin import ModelAdmin, StackedInline
 from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationForm
 from accounts.models import Profile
 
 User = get_user_model()
+
+class ProfileInline(StackedInline):
+    model = Profile
+    can_delete = False
+    verbose_name_plural = "Profile"
 
 @admin.register(User)
 class BenevolentUserAdmin(UserAdmin, ModelAdmin):
@@ -28,9 +33,15 @@ class BenevolentUserAdmin(UserAdmin, ModelAdmin):
         }),
     )
 
+    inlines = (ProfileInline,)
+
+    def get_inline_instances(self, request, obj=None):
+        if not obj:
+            return list()
+        return super().get_inline_instances(request, obj)
 
 @admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
+class ProfileAdmin(ModelAdmin):
     list_display = ("user", "first_name", "last_name", "inspiration_coins")
     search_fields = ("user__email", "first_name", "last_name")
-    list_filter = ("user__ideas",)
+    ordering = ("user__email",)
