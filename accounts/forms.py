@@ -12,6 +12,12 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ('email',)
+        error_messages = {
+            'email': {
+                'unique': 'This email address is already registered. Please use a different email.',
+                'required': 'Please enter your email address.',
+            },
+        }
 
 
 class ProfileEditForm(forms.ModelForm):
