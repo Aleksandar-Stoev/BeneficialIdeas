@@ -33,4 +33,4 @@ class BenevolentUserAdmin(UserAdmin, ModelAdmin):
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ("user", "first_name", "last_name", "inspiration_coins")
     search_fields = ("user__email", "first_name", "last_name")
-    list_filter = ("inspiration_coins",)
+    list_filter = ("user__ideas",)
