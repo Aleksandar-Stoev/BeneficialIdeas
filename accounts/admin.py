@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from unfold.admin import ModelAdmin
 from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationForm
+from accounts.models import Profile
 
 User = get_user_model()
 
@@ -26,3 +27,10 @@ class BenevolentUserAdmin(UserAdmin, ModelAdmin):
             "fields": ("email", "password1", "password2"),
         }),
     )
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ("user", "first_name", "last_name", "inspiration_coins")
+    search_fields = ("user__email", "first_name", "last_name")
+    list_filter = ("inspiration_coins",)
