@@ -1,10 +1,7 @@
-from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.core.validators import MinLengthValidator
 from django.db import models, transaction
 from django.db.models import F
-
-User = get_user_model()
-
 
 class Idea(models.Model):
     class StatusChoices(models.TextChoices):
@@ -28,7 +25,7 @@ class Idea(models.Model):
     )
 
     author = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='ideas',
         verbose_name='Author',

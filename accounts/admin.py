@@ -1,8 +1,9 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 from unfold.admin import ModelAdmin
-from accounts.models import BenevolentUser
 
+User = get_user_model()
 
-@admin.register(BenevolentUser)
+@admin.register(User)
 class BenevolentUserAdmin(ModelAdmin):
     pass

@@ -1,8 +1,6 @@
-from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.db import models
 from ideas.models import Idea
-
-User = get_user_model()
 
 
 class Comment(models.Model):
@@ -10,7 +8,7 @@ class Comment(models.Model):
         Idea, on_delete=models.CASCADE, related_name='comments'
     )
     author = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='comments',
     )
