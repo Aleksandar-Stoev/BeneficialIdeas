@@ -1,11 +1,32 @@
+# Virtual Environments
 venv/
 .venv/
 env/
+
+# Python cache and compiled files
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Databases and environment variables
 db.sqlite3
 .env
+.env.*
+!.env.example
+
+# Django static and media files
+media/
+staticfiles/
+
+# Editors and IDEs
 .vscode/
 .idea/
-media/
+
+# Operating Systems
+.DS_Store
+Thumbs.db
+
+# Logs and Tests
+*.log
+.coverage
+htmlcov/
